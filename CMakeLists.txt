@@ -209,10 +209,13 @@ endif()
 #
 
 if(CUKE_ENABLE_QT)
-    find_package(Qt5Core)
-    find_package(Qt5Gui)
-    find_package(Qt5Widgets)
-    find_package(Qt5Test)
+    find_package(Qt5 5.15 REQUIRED
+      COMPONENTS
+        Core
+        Gui
+        Widgets
+        Test
+    )
 
     if(Qt5Core_FOUND AND Qt5Gui_FOUND AND Qt5Widgets_FOUND AND Qt5Test_FOUND)
         message(STATUS "Found Qt version: ${Qt5Core_VERSION_STRING}")
@@ -220,14 +223,6 @@ if(CUKE_ENABLE_QT)
             message(STATUS "C++11 is needed from Qt version 5.7.0, building with c++11 enabled")
             set(CMAKE_CXX_STANDARD 11)
         endif()
-        add_library(Qt::Core    INTERFACE IMPORTED)
-        add_library(Qt::Gui     INTERFACE IMPORTED)
-        add_library(Qt::Widgets INTERFACE IMPORTED)
-        add_library(Qt::Test    INTERFACE IMPORTED)
-        set_target_properties(Qt::Core    PROPERTIES INTERFACE_LINK_LIBRARIES Qt5::Core   )
-        set_target_properties(Qt::Gui     PROPERTIES INTERFACE_LINK_LIBRARIES Qt5::Gui    )
-        set_target_properties(Qt::Widgets PROPERTIES INTERFACE_LINK_LIBRARIES Qt5::Widgets)
-        set_target_properties(Qt::Test    PROPERTIES INTERFACE_LINK_LIBRARIES Qt5::Test   )
     else()
         find_package(Qt4 COMPONENTS QtCore QtGui QtTest)
         if(QT4_FOUND)
