@@ -40,8 +40,11 @@ template <typename Protocol>
 void SocketServer::doAcceptOnce(basic_socket_acceptor<Protocol>& acceptor) {
 #endif
     typename Protocol::iostream stream;
-    acceptor.accept(*stream.rdbuf());
-    processStream(stream);
+    boost::system::error_code ec;
+    acceptor.accept(*stream.rdbuf(), ec);
+    if (!ec) {
+      processStream(stream);
+    }
 }
 
 void SocketServer::processStream(std::iostream& stream) {
